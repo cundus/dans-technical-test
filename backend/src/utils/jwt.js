@@ -6,3 +6,14 @@ exports.generateToken = async (data) => {
 
    return token;
 };
+
+exports.tokenVerification = async (token) => {
+   const secretKey = process.env.SECRET_KEY;
+   return jwt.verify(token, secretKey, (error, decoded) => {
+      if (error) {
+         return error;
+      } else {
+         return decoded;
+      }
+   });
+};

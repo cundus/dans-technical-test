@@ -1,3 +1,5 @@
+const jwt = require("../utils/jwt");
+
 exports.auth = async (req, res, next) => {
    try {
       let header = req.header("Authorization");
@@ -9,17 +11,7 @@ exports.auth = async (req, res, next) => {
          });
       }
       const token = header.replace("Bearer ", "");
-      const secretKey = process.env.SECRET_KEY;
-      const verification = jwt.verify(token, secretKey, (error, decoded) => {
-         if (error) {
-            return res.status(403).send({
-               status: "failed",
-               message: "user not authenticated",
-            });
-         } else {
-            return decoded;
-         }
-      });
+      const verification = jwt.tokenVerification(token);
 
       req.userData = verification.id;
 

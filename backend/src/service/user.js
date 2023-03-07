@@ -10,3 +10,7 @@ exports.getUser = async (body) => {
 
    return data;
 };
+
+exports.createUser = async (body) => {
+   return await user.create(body);
+};
