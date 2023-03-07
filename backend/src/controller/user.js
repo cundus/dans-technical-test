@@ -17,7 +17,9 @@ exports.login = async (req, res) => {
          return responds.failed(res, errValidation.details[0].message);
       }
 
-      const user = await UserService.getUser({ username });
+      const user = await UserService.getUser({
+         username: username.toLowerCase(),
+      });
 
       if (!user) {
          return responds.failed(res, "Username atau password salah!");
@@ -53,16 +55,22 @@ exports.register = async (req, res) => {
          return responds.failed(res, errValidation.details[0].message);
       }
 
-      const user = await UserService.getUser({ username: username });
+      const user = await UserService.getUser({
+         username: username.toLowerCase(),
+      });
 
       if (user) {
-         return responds.failed(res, `Username : ${username} telah digunakan!`);
+         return responds.failed(
+            res,
+            `Username : ${username.toLowerCase()} telah digunakan!`
+         );
       }
 
       const encryptedPassword = await encrypt.encrypt(password);
 
       await UserService.createUser({
          ...req.body,
+         username: username.toLowerCase(),
          password: encryptedPassword,
       });
 
