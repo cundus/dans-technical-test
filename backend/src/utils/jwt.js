@@ -8,8 +8,7 @@ exports.generateToken = async (data) => {
 };
 
 exports.tokenVerification = async (token) => {
-   const secretKey = process.env.SECRET_KEY;
-   return jwt.verify(token, secretKey, (error, decoded) => {
+   return jwt.verify(token, secret, (error, decoded) => {
       if (error) {
          return error;
       } else {

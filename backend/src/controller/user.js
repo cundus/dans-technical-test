@@ -13,6 +13,7 @@ exports.login = async (req, res) => {
       );
 
       if (errValidation) {
+         console.log(errValidation);
          return responds.failed(res, errValidation.details[0].message);
       }
 
@@ -52,7 +53,7 @@ exports.register = async (req, res) => {
          return responds.failed(res, errValidation.details[0].message);
       }
 
-      const user = await UserService.getUser(username);
+      const user = await UserService.getUser({ username: username });
 
       if (user) {
          return responds.failed(res, `Username : ${username} telah digunakan!`);
@@ -61,7 +62,7 @@ exports.register = async (req, res) => {
       const encryptedPassword = await encrypt.encrypt(password);
 
       await UserService.createUser({
-         ...body,
+         ...req.body,
          password: encryptedPassword,
       });
 
