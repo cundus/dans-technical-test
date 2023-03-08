@@ -11,9 +11,9 @@ exports.auth = async (req, res, next) => {
          });
       }
       const token = header.replace("Bearer ", "");
-      const verification = jwt.tokenVerification(token);
-
-      req.userData = verification.id;
+      const verification = await jwt.tokenVerification(token);
+      console.log(verification);
+      req.userData = verification.data;
 
       next();
    } catch (error) {

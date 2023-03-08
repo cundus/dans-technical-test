@@ -82,3 +82,49 @@ exports.register = async (req, res) => {
       return responds.error(res, error.message);
    }
 };
+
+exports.checkUser = async (req, res) => {
+   try {
+      const { userData } = req;
+
+      const user = await UserService.getUser({
+         id: userData.id,
+      });
+
+      if (!user) {
+         return responds.failed(res, "Username tidak ditemukan!");
+      }
+
+      const token = await jwt.generateToken(user);
+
+      return responds.success(res, {
+         message: "success login",
+         data: { token },
+      });
+   } catch (error) {
+      console.log("Error From ", error);
+      return responds.error(res, error.message);
+   }
+};
+
+exports.getUser = async (req, res) => {
+   try {
+      const { userData } = req;
+
+      const user = await UserService.getUser({
+         id: userData.id,
+      });
+
+      if (!user) {
+         return responds.failed(res, "Username tidak ditemukan!");
+      }
+
+      return responds.success(res, {
+         message: "success login",
+         data: user,
+      });
+   } catch (error) {
+      console.log("Error From ", error);
+      return responds.error(res, error.message);
+   }
+};

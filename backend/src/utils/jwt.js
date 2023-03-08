@@ -8,11 +8,13 @@ exports.generateToken = async (data) => {
 };
 
 exports.tokenVerification = async (token) => {
-   return jwt.verify(token, secret, (error, decoded) => {
+   const data = jwt.verify(token, secret, (error, decoded) => {
       if (error) {
          return error;
       } else {
          return decoded;
       }
    });
+
+   return data;
 };
