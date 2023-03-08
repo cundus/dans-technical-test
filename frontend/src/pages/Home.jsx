@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useNavigation, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import { getData } from "../api/call/job";
 import Swal from "sweetalert2";
@@ -24,7 +24,7 @@ const Home = () => {
       full_time: false,
       page: 1,
    });
-
+   const navigate = useNavigate();
    const queryClient = useQueryClient();
 
    let [searchParams, setSearchParams] = useSearchParams(query);
@@ -130,7 +130,7 @@ const Home = () => {
             ) : (
                data?.data?.map((item) => (
                   <Stack
-                     onClick={() => {}}
+                     onClick={() => navigate("detail/" + item.id)}
                      key={item?.id}
                      className="w-full cursor-pointer m-2 border-t-2 p-3 rounded-lg hover:bg-slate-200"
                      direction={"row"}

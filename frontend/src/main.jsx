@@ -8,6 +8,7 @@ import Root from "./layout/Root";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import { StoreProvider } from "./context/store";
+import Detail from "./pages/Detail";
 
 const queryClient = new QueryClient();
 
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
          },
          {
             path: "detail/:id",
-            element: <Home />,
+            element: <Detail />,
          },
       ],
    },

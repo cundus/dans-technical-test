@@ -5,3 +5,9 @@ export const getData = async (qs) => {
 
    return data;
 };
+
+export const getDetail = async (id) => {
+   const { data } = await API.get("/jobs/detail/" + id);
+
+   return data.data;
+};
