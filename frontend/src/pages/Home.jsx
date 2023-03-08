@@ -48,7 +48,7 @@ const Home = () => {
       const notEmpty = {};
       Object.keys(query).map((item) => {
          if (item == "page") {
-            return (notEmpty["page"] = 1);
+            return;
          }
 
          if (item !== "full_time" && query[item] !== "") {
@@ -185,30 +185,9 @@ const Home = () => {
             <Pagination
                count={Math.ceil(data?.data?.length / 6)}
                onChange={(e, value) => {
-                  const notEmpty = {};
-                  Object.keys(query).map((item) => {
-                     if (item == "page") {
-                        return (notEmpty["page"] = 1);
-                     }
-
-                     if (item !== "full_time" && query[item] !== "") {
-                        return (notEmpty[item] = query[item]);
-                     }
-
-                     if (!query[item]) {
-                        return;
-                     }
-
-                     return (notEmpty[item] = query[item]);
-                  });
-
-                  console.log(notEmpty);
-
-                  if (Object.keys(notEmpty).length < 1) {
-                     return setSearchParams({ page: value });
-                  }
-
-                  setSearchParams(notEmpty);
+                  console.log(value);
+                  // setQuery({ ...query, page: value });
+                  setSearchParams({ ...query, page: value });
                }}
             />
          </Box>
