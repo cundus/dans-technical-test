@@ -27,7 +27,7 @@ const Home = () => {
 
    const queryClient = useQueryClient();
 
-   let [searchParams, setSearchParams] = useSearchParams("page=1");
+   let [searchParams, setSearchParams] = useSearchParams(query);
 
    const handleChange = (e) => {
       const { name, value } = e.target;
@@ -35,7 +35,7 @@ const Home = () => {
       setQuery({ ...query, [name]: value });
    };
 
-   const { isLoading, data, refetch } = useQuery({
+   const { isFetching, data, refetch } = useQuery({
       queryKey: ["jobs"],
       queryFn: async () => await getData(searchParams.toString()),
       refetchOnMount: false,
@@ -47,6 +47,10 @@ const Home = () => {
    function handleSubmit() {
       const notEmpty = {};
       Object.keys(query).map((item) => {
+         if (item == "page") {
+            return (notEmpty["page"] = 1);
+         }
+
          if (item !== "full_time" && query[item] !== "") {
             return (notEmpty[item] = query[item]);
          }
@@ -58,11 +62,13 @@ const Home = () => {
          return (notEmpty[item] = query[item]);
       });
 
-      if (!notEmpty) {
-         return;
+      console.log(notEmpty);
+
+      if (Object.keys(notEmpty).length < 1) {
+         return setSearchParams({ page: 1 });
       }
 
-      setSearchParams(notEmpty, { replace: true });
+      setSearchParams(notEmpty);
    }
 
    useEffect(() => {
@@ -119,13 +125,13 @@ const Home = () => {
          <Box className="border-2 rounded-lg flex-1 mt-3 p-5">
             <Typography variant="h5">Pekerjaan</Typography>
 
-            {isLoading ? (
+            {isFetching ? (
                <CircularProgress />
             ) : (
                data?.data?.map((item) => (
                   <Stack
                      onClick={() => {}}
-                     key={item.id}
+                     key={item?.id}
                      className="w-full cursor-pointer m-2 border-t-2 p-3 rounded-lg hover:bg-slate-200"
                      direction={"row"}
                      justifyContent="space-between"
@@ -137,7 +143,7 @@ const Home = () => {
                            fontWeight={"bold"}
                            color="teal"
                         >
-                           {item.title}
+                           {item?.title}
                         </Typography>
                         <Stack
                            direction={"row"}
@@ -145,7 +151,7 @@ const Home = () => {
                            spacing={1}
                         >
                            <Typography variant="caption" color={"GrayText"}>
-                              {item.company}
+                              {item?.company}
                            </Typography>
                            <Typography variant="caption" color={"GrayText"}>
                               -
@@ -156,7 +162,7 @@ const Home = () => {
                               color="green"
                               fontWeight={"bold"}
                            >
-                              {item.type}
+                              {item?.type}
                            </Typography>
                         </Stack>
                      </Box>
@@ -167,10 +173,10 @@ const Home = () => {
                            className="text-gray-600 "
                            fontWeight={"bold"}
                         >
-                           {item.location}
+                           {item?.location}
                         </Typography>
                         <Typography variant="caption" color={"GrayText"}>
-                           {moment(item.created_at).fromNow()}
+                           {moment(item?.created_at).fromNow()}
                         </Typography>
                      </Stack>
                   </Stack>
@@ -178,7 +184,32 @@ const Home = () => {
             )}
             <Pagination
                count={Math.ceil(data?.data?.length / 6)}
-               onChange={(e, value) => {}}
+               onChange={(e, value) => {
+                  const notEmpty = {};
+                  Object.keys(query).map((item) => {
+                     if (item == "page") {
+                        return (notEmpty["page"] = 1);
+                     }
+
+                     if (item !== "full_time" && query[item] !== "") {
+                        return (notEmpty[item] = query[item]);
+                     }
+
+                     if (!query[item]) {
+                        return;
+                     }
+
+                     return (notEmpty[item] = query[item]);
+                  });
+
+                  console.log(notEmpty);
+
+                  if (Object.keys(notEmpty).length < 1) {
+                     return setSearchParams({ page: value });
+                  }
+
+                  setSearchParams(notEmpty);
+               }}
             />
          </Box>
       </div>
